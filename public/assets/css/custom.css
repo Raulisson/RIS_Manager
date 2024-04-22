@@ -1,0 +1,133 @@
+div.modal-dialog div.modal-header {
+    text-align: left;
+}
+.ui-sortable-helper {
+    border: 1px solid #EEE;
+    background: #fff;
+}
+.ui-sortable-helper td:first-child {
+    width: 300px;
+}
+.ui-sortable-helper td.td-medico {
+    width: 200px;
+}
+div.auth-box .logo h5 {
+    color: #0692bb;
+}
+input[type=datetime-local] {
+    border: none !important;
+}
+.select2-container--default .select2-selection--single { 
+    border: none;
+}
+select.form-control {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+.pagination {
+    margin-bottom: 0;
+}
+
+.custom-switch.custom-switch-md .custom-control-label {
+    padding-left: 2rem;
+    padding-bottom: 1.5rem;
+}
+
+.custom-switch.custom-switch-md .custom-control-label::before {
+    height: 1.5rem;
+    width: calc(2rem + 0.75rem);
+    border-radius: 3rem;
+}
+
+.custom-switch.custom-switch-md .custom-control-label::after {
+    width: calc(1.5rem - 4px);
+    height: calc(1.5rem - 4px);
+    border-radius: calc(2rem - (1.5rem / 2));
+}
+
+.custom-switch.custom-switch-md .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(1.5rem - 0.25rem));
+}
+.tab-content {
+    background: #fff;
+}
+.nav-tabs .nav-link {
+    color: #313131;
+}
+thead.text-white th {
+    color: #fff !important;
+}
+.ls-box-filter {
+    background-color: #f7f7f7;
+    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #dddddd;
+}
+.ls-box-filter .form-control {
+    width: 250px;
+    display: inline;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+.select2-filter .select2-container {
+    margin-top: 5px;
+}
+.select2-container {
+    vertical-align: top;
+    border: 1px solid #e9ecef;
+}
+.select2-container--default .select2-selection--single {
+    height: 32px;
+    padding-top: 3px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 4px;
+}
+table#table-receita tr td:nth-of-type(1) {
+    border-left: 5px solid #e4e7ea;
+}
+table#table-receita .tr-atrasado td:nth-of-type(1) {
+    border-left: 5px solid #F33155;
+}
+table#table-receita .tr-pago td:nth-of-type(1) {
+    border-left: 5px solid #7ace4c;
+}
+table#table-receita td.nome a {
+    color: #797979;
+}
+table#table-receita td.nome a:hover {
+    text-decoration: underline;
+}
+.comment-widgets .comment-row {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+.comment-widgets .comment-text {
+    padding: 0;
+}
+.message-widget {
+    height: 458px;
+    overflow-y: auto;
+}
+.ms-auto {
+    margin-left: auto !important;
+}
+/* Printer */
+@page {
+    size:  auto;
+    margin: 0mm;
+}
+@media print {
+    header, aside,
+    div.d-md-flex .btn, table td a {
+        display: none !important;
+    }
+    div.page-wrapper {
+        margin-left: 0 !important;
+    }
+    span.badge {
+        color: #000 !important;
+        border: none;
+    }
+}
