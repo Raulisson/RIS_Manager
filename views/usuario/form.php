@@ -69,12 +69,11 @@
 													<!-- Admin -->
 													<span class="badge badge-primary m-1" style="font-size: 12px">Administrador</span>
 												<?php else : ?>
-													<select name="grupos[]" id="perfil" class="form-control" required autocomplete="off">
-														<?php
-														foreach ($this->grupos as $grupo) {
-															$selected = (isset($this->usuario) && in_array($grupo['id'], $this->gruposUsuario)) ? 'selected' : '';
-															echo "<option value='{$grupo['id']}' {$selected}>{$grupo['nome']}</option>";
+													<select name="perfil" id="perfil" class="form-control" required autocomplete="off">
+														<?php if($usuario['perfil'] = "1") {
+															echo "<option value='1'>Administrador</option>";
 														}
+														echo "<option value='0'>Usuário</option>";
 														?>
 													</select>
 												<?php endif; ?>

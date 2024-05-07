@@ -72,7 +72,7 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin6">
                     <!-- Logo -->
-                    <a class="navbar-brand" href="dashboard.html">
+                    <a class="navbar-brand" href="?controle=dashboard&acao=dashboard">
                         <!-- Logo icon -->
                         <b class="logo-icon" style="width:100%;text-align:center;">
                             <!-- Dark Logo icon -->
@@ -108,7 +108,19 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav" style="padding-top: 10px;">
                     <ul id="sidebarnav">
-
+                        <li class="sidebar-item">
+                            <a href="?controle=dashboard&acao=dashboard"" class="sidebar-link">
+                                <?php
+                                    $nome = Security::usuario()['nome'];
+                                    if(Security::usuario()['perfil'] == 1){
+                                        $perfil = "Administrador";
+                                    } else {
+                                        $perfil = "Usuario";
+                                    }
+                                    echo "<span class='hide-menu'>{$nome} - {$perfil}</span>";
+                                ?>
+                            </a>
+                        </li>
                         <!-- Atividades -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -167,16 +179,40 @@
                                     </a>
                                 </li>
 
+                                <!-- Menu - Modens -->
+                                <li class="sidebar-item">
+                                    <a href="?controle=equipamento&acao=listarModem" class="sidebar-link">
+                                        <i class="mdi mdi-border-top"></i>
+                                        <span class="hide-menu">Lista de Modens</span>
+                                    </a>
+                                </li>
+
                                 <!-- Menu - Dispositivos -->
                                 <li class="sidebar-item">
                                     <a href="?controle=equipamento&acao=listarEquipamento" class="sidebar-link">
                                         <i class="mdi mdi-border-top"></i>
-                                        <span class="hide-menu">Lista de Dispositivos</span>
+                                        <span class="hide-menu">Outros Equipamentos</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
+                        <!-- Menu - Inventário -->
+                        <li class="sidebar-item">
+                            <a href="?controle=inventario&acao=listar" class="sidebar-link">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                                <span class="hide-menu">Inventário</span>
+                            </a>
+                        </li>
+
+                        <!-- Menu - Estoque -->
+                        <li class="sidebar-item">
+                            <a href="?controle=s&acao=dashboard" class="sidebar-link">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                                <span class="hide-menu">Estoque</span>
+                            </a>
+                        </li>
+                        
                         <!-- Menu - Pontos -->
                         <li class="sidebar-item">
                             <a href="?controle=ponto&acao=listar" class="sidebar-link">

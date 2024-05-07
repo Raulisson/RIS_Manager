@@ -14,7 +14,7 @@ class AtividadeController extends AbstractController
     {
         $db = Database::getConn();
         $events = array();
-        $bookings = $db->bookings()->order("created_at");
+        $bookings = $db->bookings()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("created_at");
         foreach($bookings as $booking) {
             $color = null;
             if($booking["ativo"] == '0') {
@@ -55,9 +55,11 @@ class AtividadeController extends AbstractController
         // Recupera os dados do formulário
         $title = $_POST['local'];
         $start_date = $_POST['data_inicio'];
+        $end_date = $start_date;
         $obs = $_POST['obs'];
         $ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0;
         $prioridade = $_POST['prioridade'];
+        $id_empresa = Security::usuario()['id_empresa'];
 
         // Obtém o horário atual
         $currentDateTime = date('Y-m-d H:i:s');
@@ -65,11 +67,13 @@ class AtividadeController extends AbstractController
         $dados = [
             'title' => $title,
             'start_date' => $start_date,
+            'end_date' => $end_date,
             'obs' => $obs,
             'ativo' => $ativo,
             'prioridade' => $prioridade,
             'created_at' => $currentDateTime,
-            'updated_at' => $currentDateTime
+            'updated_at' => $currentDateTime,
+            'id_empresa' => $id_empresa
         ];
 
         // Insere os dados no banco de dados
@@ -122,6 +126,7 @@ public function editarAtividade()
         $obs = $_POST['edit_obs'];
         $ativo = isset($_POST['edit_ativo']) ? $_POST['edit_ativo'] : 0;
         $prioridade = $_POST['edit_prioridade'];
+        $id_empresa = Security::usuario()['id_empresa'];
 
         // Obtém o horário atual
         $currentDateTime = date('Y-m-d H:i:s');
@@ -134,7 +139,8 @@ public function editarAtividade()
             'obs' => $obs,
             'ativo' => $ativo,
             'prioridade' => $prioridade,
-            'created_at' => $currentDateTime
+            'created_at' => $currentDateTime,
+            'id_empresa' => $id_empresa
         ]);
 
         if ($result) {
@@ -183,6 +189,7 @@ public function pendenciar()
         $ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0; 
         $prioridade = $_POST['prioridade'];
         $currentDateTime = date('Y-m-d H:i:s');
+        $id_empresa = Security::usuario()['id_empresa'];
 
         // Primeiro, edita a atividade atual, mudando a coluna "ativo" para 0
         $db = Database::getConn();
@@ -196,7 +203,8 @@ public function pendenciar()
                 'ativo' => $ativo, 
                 'prioridade' => $prioridade,
                 'created_at' => $currentDateTime, // Adiciona o horário atual para 'created_at'
-                'updated_at' => $currentDateTime 
+                'updated_at' => $currentDateTime,
+                'id_empresa' => $id_empresa
             ]);
 
             if ($atividadePendente) {
@@ -219,6 +227,7 @@ public function listarPendencias()
         $this->pagination = new Pagination("bookings", null, array());
         $this->pagination->columnsFilters = array("Atividade");
         $this->pagination->filters[] = "ativo = 1";
+        $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
         $this->pagination->load();
         
         $db = Database::getConn();
@@ -233,6 +242,7 @@ public function listarFinalizados()
     $this->pagination = new Pagination("bookings", null, array());
     $this->pagination->columnsFilters = array("Atividade");
     $this->pagination->filters[] = "ativo = 0";
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
     $this->pagination->load();
     
     $db = Database::getConn();

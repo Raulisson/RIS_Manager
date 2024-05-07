@@ -1,11 +1,11 @@
 <div class="page-breadcrumb bg-white p-4">
 	<div class="row align-items-center">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-			<h4 class="page-title text-uppercase font-medium font-14">Pontos</h4>
+			<h4 class="page-title text-uppercase font-medium font-14">Equipamentos Gerais</h4>
 		</div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
-				<a href="?controle=ponto&acao=form" class="btn btn-primary ml-auto">
+				<a href="?controle=equipamento&acao=cadastrarEquipamento" class="btn btn-primary ml-auto">
 					Adicionar
 				</a>
 			</div>
@@ -31,30 +31,25 @@
 									<?php echo $this->pagination->column("nome", "Nome") ?>
 								</th>
 								<th scope="col">
-									<?php echo $this->pagination->column("endereco", "Endereço") ?>
+									<?php echo $this->pagination->column("marca", "Marca") ?>
 								</th>
                                 <th scope="col">
-									<?php echo $this->pagination->column("nome_responsavel", "Nome do Responsável") ?>
-								</th>
-                                <th scope="col">
-									<?php echo $this->pagination->column("contato_responsavel", "Contato do Responsável") ?>
+									<?php echo $this->pagination->column("descricao", "Descrição") ?>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
-							foreach ($this->pagination->rows as $pontos) {
+							foreach ($this->pagination->rows as $equipamentos) {
 								echo "<tr>";
-									echo "<td>{$pontos['id']}</td>";
-									echo "<td>{$pontos['nome']}</td>";
-									echo "<td>{$pontos['endereco']}</td>";
-									echo "<td>{$pontos['nome_responsavel']}</td>";
-									echo "<td>{$pontos['contato_responsavel']}</td>";
+									echo "<td>{$equipamentos['id']}</td>";
+									echo "<td>{$equipamentos['nome']}</td>";
+									echo "<td>{$equipamentos['marca']}</td>";
+									echo "<td>{$equipamentos['descricao']}</td>";
                                     echo "<td class='text-right pr-5'>
-									<a class='text-16 mt-2 font-weight-bold' href=''>Equipamentos</a>";
-                                    echo "<a class='text-16 ml-3 mt-2 font-weight-bold' href='index.php?controle=ponto&acao=form&id={$pontos['id']}'>Editar</a>";
-									if ($usuario['perfil'] = "1") {
-                                        echo "<a class='text-16 ml-3 mt-2 font-weight-bold text-danger' href='javascript:remove({$pontos['id']})'>Excluir</a>";
+									<a class='text-16 mt-2 font-weight-bold' href='index.php?controle=equipamento&acao=cadastrarEquipamento&id={$equipamentos['id']}'>Editar</a>";
+                                    if ($usuario['perfil'] = "1") {
+                                        echo "<a class='text-16 ml-3 mt-2 font-weight-bold text-danger' href='javascript:remove({$equipamentos['id']})'>Excluir</a>";
                                     }
 									echo "</td>";
 								echo "</tr>";
@@ -74,7 +69,7 @@
 	function remove(id) {
 		confirme("Tem certeza que desejar remover esse registro?", function(rs) {
 			if (rs) {
-				window.location = 'index.php?controle=ponto&acao=excluir&id=' + id;
+				window.location = 'index.php?controle=equipamento&acao=excluirEquipamento&id=' + id;
 			}
 		});
 	}

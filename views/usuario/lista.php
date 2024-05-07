@@ -44,7 +44,16 @@
 								echo "<td>{$usuario['id']}</td>";
 								echo "<td>" . utf8_encode($usuario['nome']) . "</td>";
 								echo "<td>" . utf8_encode($usuario['email']) . "</td>";
-								
+								if ($usuario['perfil'] = "1") {
+									echo "<td><span class='badge badge-primary m-1' style='font-size: 12px'>Administrador</span></td>";
+								}else {
+									echo "<td><span class='badge badge-secondary m-1' style='font-size: 12px'>Usuário</span></td>";
+								}
+								echo "<td class='text-right pr-5'>
+									<a class='text-16 mt-2 font-weight-bold' href='index.php?controle=usuario&acao=form&id={$usuario['id']}'>Editar</a>";
+                                    if ($usuario['perfil'] = "1") {
+                                        echo "<a class='text-16 ml-3 mt-2 font-weight-bold text-danger' href='javascript:remove({$usuario['id']})'>Excluir</a>";
+                                    }
 								echo "</td>";
 								echo "</tr>";
 							}

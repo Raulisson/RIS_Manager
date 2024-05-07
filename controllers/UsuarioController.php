@@ -29,8 +29,9 @@ class UsuarioController extends AbstractController
                 $_SESSION['usuario']['email']       = $usuario['email'];
                 $_SESSION['usuario']['perfil']       = $usuario['perfil'];
                 $_SESSION['usuario']['id_plano']       = $usuario['id_plano'];
+                $_SESSION['usuario']['id_empresa']  = $usuario['id_empresa'];
 
-                Util::redirect("index.php?controle=usuario&acao=listar");
+                Util::redirect("index.php?controle=dashboard&acao=dashboard");
             } else {
                 Util::redirect("index.php?controle=usuario&acao=login&erro=1");
             }
@@ -46,6 +47,7 @@ class UsuarioController extends AbstractController
         // Carrega os usuários
         $this->pagination = new Pagination("usuario", null, array());
         $this->pagination->columnsFilters = array("id", "nome", "email");
+        $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
         $this->pagination->load();
 
         // Renderiza a view
@@ -88,13 +90,12 @@ class UsuarioController extends AbstractController
             foreach ($gruposRels as $grupoRel) {
                 $this->gruposUsuario[] = $grupoRel['id_acl_grupo'];
             }
-
-            // Checa a empresa proprietária do registro
+             // Checa a empresa proprietária do registro
             Security::checkCompany($this->usuario);
         }
 
         // Carrega os grupos
-        $gruposDb = $db->acl_grupo()->where("publico = 1 OR id_empresa = " . Security::usuario()['id_empresa'])->order("nome");
+        $gruposDb = $db->acl_grupo()->where("publico = 1")->order("nome");
         $this->grupos = array();
         foreach ($gruposDb as $grupoDb) {
             $this->grupos[] = array(
@@ -112,7 +113,8 @@ class UsuarioController extends AbstractController
     {
         $db = Database::getConn();
         $this->gruposUsuario = array();
-        $perfil = ($_POST['grupos']);
+        $perfil = ($_POST['perfil']);
+        $plano = "4";
 
         // Recupera o usuário no caso de edição, ou cria um array para o novo
         if ($_POST['id']) {
@@ -129,6 +131,7 @@ class UsuarioController extends AbstractController
         $usuario['nome']            = utf8_decode($_POST['nome']);
         $usuario['email']             = utf8_decode($_POST['email']);
         $usuario['perfil']             = $perfil;
+        $usuario['id_plano']            =  $plano;
         if ($_POST['senha']) {
             $usuario['senha']       = sha1(md5(utf8_decode($_POST['senha'])));
         }
