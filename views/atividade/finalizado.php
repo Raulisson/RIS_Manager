@@ -9,6 +9,23 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
+			<div class="row">
+				<div class="col-lg-12">
+				<form method="POST" action="?controle=atividade&acao=filtro">
+                    <div class="col-md-2">
+                    	<label>Data de Início:</label>
+                        <input type="date" name="data_inicio" class="form-control">
+						
+                        <label>Data Final:</label>
+                        <input type="date" name="data_final" class="form-control">
+
+                        <label>Palavra-Chave:</label>
+                        <input type="text" name="pesquisa" class="form-control">
+                        <button type="submit" class="btn btn-secondary m-1">Filtrar</button>
+                    </div>
+                </form>
+				</div>
+			</div>
 			<div class="white-box">
 				<div class="table-responsive">
 

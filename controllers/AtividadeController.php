@@ -42,7 +42,7 @@ class AtividadeController extends AbstractController
         }
     echo json_encode($events);
     }
-
+    
     /**
      * Salvar uma atividade
      */
@@ -238,7 +238,7 @@ public function listarPendencias()
 // Página de Listagem de Finalizados
 public function listarFinalizados()
 {
-    // Carrega as pendencias
+    // Carrega os finalizados
     $this->pagination = new Pagination("bookings", null, array());
     $this->pagination->columnsFilters = array("Atividade");
     $this->pagination->filters[] = "ativo = 0";
@@ -249,4 +249,29 @@ public function listarFinalizados()
     // Renderiza a view
     $this->render('atividade/finalizado', 'default');
 }
+// Filtro de atividades
+public function filtro(){
+    // Filtro
+    $data_inicio                = htmlspecialchars($_POST["data_inicio"]);
+    $data_final                 = htmlspecialchars($_POST["data_final"]);
+    $palavra_chave = isset($_POST["pesquisa"]) ? htmlspecialchars($_POST["pesquisa"]) : null;
+
+    // Carrega os finalizados com o filtro
+    $this->pagination = new Pagination("bookings", null, array());
+    $this->pagination->columnsFilters = array("Atividade");
+    $this->pagination->filters[] = "ativo = 0";
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    $this->pagination->filters[] = "start_date >= '" . $data_inicio . "'";
+    $this->pagination->filters[] = "start_date <= '" . $data_final . "'";
+    // Adiciona o filtro por palavra-chave, se estiver definido
+    if ($palavra_chave !== null) {
+        $this->pagination->filters[] = "title LIKE '%" . $palavra_chave . "%'";
+    }
+    $this->pagination->load();
+    
+    $db = Database::getConn();
+    // Renderiza a view
+    $this->render('atividade/finalizado', 'default');
+}
+
 }
