@@ -55,7 +55,11 @@
                                         echo "<td>{$inventarios->id_equipamento['nome']}, {$inventarios->id_equipamento['marca']}</td>";
                                         echo "<td>{$inventarios->id_equipamento['descricao']}</td>";
                                     }
-                                    echo "<td>{$inventarios['patrimonio']}</td>";
+                                    if($inventarios['patrimonio']){
+                                        echo "<td>{$inventarios['patrimonio']}</td>";
+                                    }else {
+                                        echo "<td>Não informado</td>";
+                                    }
                                     if($inventarios['id_ponto']){
                                         echo "<td>{$inventarios->id_ponto['nome']}</td>";
                                     }else {

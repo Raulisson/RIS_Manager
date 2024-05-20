@@ -96,7 +96,7 @@
 											<div class="form-group col-md-3" id="patrimonioDiv" style="display:none;">
 												<label for="patrimonio" class="ul-form__label p-0"><span>*</span>Número do Patrimônio:</label>
 												<input type="text" class="form-control" name="patrimonio" id="patrimonio" value="<?php if (isset($this->inventario))
-																															echo $this->inventario['patrimonio'] ?>" required maxlength="10">
+																															echo $this->inventario['patrimonio'] ?>" maxlength="10">
 											</div>
                                         </div>
                                         <div class="row mt-3">
