@@ -1,7 +1,7 @@
 <div class="page-breadcrumb bg-white p-4">
 	<div class="row align-items-center">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-			<h4 class="page-title text-uppercase font-medium font-14">Inventário</h4>
+			<h4 class="page-title text-uppercase font-medium font-14">Estoque</h4>
 		</div>
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
@@ -16,8 +16,10 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
-			    <!-- selectEquipamento -->
-				<div class="form-group col-md-4">
+            <div class="row">
+				<div class="col-lg-12">
+                    <!-- selectEquipamento -->
+					<div class="form-group col-md-4">
                         <label for="selectEquipamento" class="ul-form__label p-0"><span>*</span> Equipamento </label>
 						<select name="selectEquipamento" id="selectEquipamento" onchange="mostraDiv(this.value)" class="form-control" required autocomplete="off">
                             <option>[Selecione o equipamento para filtrar]</option>
@@ -26,7 +28,7 @@
                             <option value="3">Equipamentos Gerais</option>
 						</select>
 					</div>
-				<form method="POST" action="?controle=inventario&acao=filtro">
+				<form method="POST" action="?controle=inventario&acao=filtroEstoque">
                     <div class="col-lg-12">
                         <div class="col-md-2" id="mostraPc" style="display:none;">
                             <label>Insira o ID do Computador:</label>
@@ -43,6 +45,8 @@
                         <button type="submit" style="display:none;" id="mostraFiltro" class="btn btn-secondary m-1">Filtrar</button>
                     </div>
                 </form>
+				</div>
+			</div>
 			<div class="white-box">
 				<div class="table-responsive">
 
@@ -71,7 +75,7 @@
 							<?php
 							foreach ($this->pagination->rows as $inventarios) {
 								echo "<tr>";
-									if($inventarios['id_ponto']){
+									if(!$inventarios['id_ponto']){
 										if($inventarios['id_computador']){
 											echo "<td>{$inventarios->id_computador['marca']}</td>";
 											echo "<td>{$inventarios->id_computador['tipo']}</td>";
@@ -115,7 +119,7 @@
 	</div>
 </div>
 <script>
-	function mostraDiv(value){
+    function mostraDiv(value){
         const mostraFiltro = document.getElementById("mostraFiltro");
         const mostraPc = document.getElementById("mostraPc");
         const mostraTela = document.getElementById("mostraTela");

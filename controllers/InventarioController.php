@@ -15,6 +15,19 @@ public function listar()
     // Renderiza a view
     $this->render('inventario/lista', 'default');
 }
+// Lista do inventário em estoque
+public function estoque()
+{
+    // Carrega o inventario
+    $this->pagination = new Pagination("inventario", null, array());
+    $this->pagination->columnsFilters = array("data");
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    $this->pagination->load();
+    
+    $db = Database::getConn(true);
+    // Renderiza a view
+    $this->render('estoque/lista', 'default');
+}
 // Formulário dos inventarios
 public function form()
 {
@@ -132,6 +145,54 @@ public function excluir()
         $inventario->delete();
         Util::redirect('index.php?controle=inventario&acao=listar');
     }
+}
+// Filtro do inventario
+public function filtro(){
+    // Filtro
+    $pesquisaPc = isset($_POST["pesquisaPc"]) ? htmlspecialchars($_POST["pesquisaPc"]) : null;
+    $pesquisaTela = isset($_POST["pesquisaTela"]) ? htmlspecialchars($_POST["pesquisaTela"]) : null;
+    $pesquisaEquipamento = isset($_POST["pesquisaEquipamento"]) ? htmlspecialchars($_POST["pesquisaEquipamento"]) : null;
+
+    // Carrega os finalizados com o filtro
+    $this->pagination = new Pagination("inventario", null, array());
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    // Adiciona o filtro pelo id do equipamento selecionado
+    if ($pesquisaPc) {
+        $this->pagination->filters[] = "id_computador LIKE '%" . $pesquisaPc . "%'";
+    }else if ($pesquisaTela){
+        $this->pagination->filters[] = "id_tela LIKE '%" . $pesquisaTela . "%'";
+    }else if ($pesquisaEquipamento){
+        $this->pagination->filters[] = "id_equipamento LIKE '%" . $pesquisaEquipamento . "%'";
+    }
+    $this->pagination->load();
+    
+    $db = Database::getConn();
+    // Renderiza a view
+    $this->render('inventario/lista', 'default');
+}
+// Filtro do estoque
+public function filtroEstoque(){
+    // Filtro
+    $pesquisaPc = isset($_POST["pesquisaPc"]) ? htmlspecialchars($_POST["pesquisaPc"]) : null;
+    $pesquisaTela = isset($_POST["pesquisaTela"]) ? htmlspecialchars($_POST["pesquisaTela"]) : null;
+    $pesquisaEquipamento = isset($_POST["pesquisaEquipamento"]) ? htmlspecialchars($_POST["pesquisaEquipamento"]) : null;
+
+    // Carrega os finalizados com o filtro
+    $this->pagination = new Pagination("inventario", null, array());
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    // Adiciona o filtro pelo id do equipamento selecionado
+    if ($pesquisaPc) {
+        $this->pagination->filters[] = "id_computador LIKE '%" . $pesquisaPc . "%'";
+    }else if ($pesquisaTela){
+        $this->pagination->filters[] = "id_tela LIKE '%" . $pesquisaTela . "%'";
+    }else if ($pesquisaEquipamento){
+        $this->pagination->filters[] = "id_equipamento LIKE '%" . $pesquisaEquipamento . "%'";
+    }
+    $this->pagination->load();
+    
+    $db = Database::getConn();
+    // Renderiza a view
+    $this->render('estoque/lista', 'default');
 }
 
 }

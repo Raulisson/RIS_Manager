@@ -16,6 +16,13 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
+			<form method="POST" action="?controle=equipamento&acao=filtroModem">
+                <div class="col-md-2">
+                    <label>ID do Ponto:</label>
+                    <input type="text" name="pesquisa" class="form-control">
+                    <button type="submit" class="btn btn-secondary m-1">Filtrar</button>
+                </div>
+            </form>
 			<div class="white-box">
 				<div class="table-responsive">
 

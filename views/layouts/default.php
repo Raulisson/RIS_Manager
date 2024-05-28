@@ -154,7 +154,39 @@
                                 </li>
                             </ul>
                         </li>
+                        
+                        <!-- Menu - Pontos -->
+                        <li class="sidebar-item">
+                            <a href="?controle=ponto&acao=listar" class="sidebar-link">
+                                <i class="fas fa-building" aria-hidden="true"></i>
+                                <span class="hide-menu">Pontos</span>
+                            </a>
+                        </li>
 
+                        <!-- Menu - Inventário -->
+                        <li class="sidebar-item">
+                            <a href="?controle=inventario&acao=listar" class="sidebar-link">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                                <span class="hide-menu">Inventário</span>
+                            </a>
+                        </li>
+
+                        <!-- Menu - Estoque -->
+                        <li class="sidebar-item">
+                            <a href="?controle=inventario&acao=estoque" class="sidebar-link">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                                <span class="hide-menu">Estoque</span>
+                            </a>
+                        </li>
+
+                        <!-- Menu - Modens -->
+                        <li class="sidebar-item">
+                            <a href="?controle=equipamento&acao=listarModem" class="sidebar-link">
+                                <i class="fa-solid fa-wifi"></i>
+                                <span class="hide-menu">Modens</span>
+                            </a>
+                        </li>
+                        
                         <!-- Equipamentos -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -179,14 +211,6 @@
                                     </a>
                                 </li>
 
-                                <!-- Menu - Modens -->
-                                <li class="sidebar-item">
-                                    <a href="?controle=equipamento&acao=listarModem" class="sidebar-link">
-                                        <i class="mdi mdi-border-top"></i>
-                                        <span class="hide-menu">Lista de Modens</span>
-                                    </a>
-                                </li>
-
                                 <!-- Menu - Dispositivos -->
                                 <li class="sidebar-item">
                                     <a href="?controle=equipamento&acao=listarEquipamento" class="sidebar-link">
@@ -197,29 +221,6 @@
                             </ul>
                         </li>
 
-                        <!-- Menu - Inventário -->
-                        <li class="sidebar-item">
-                            <a href="?controle=inventario&acao=listar" class="sidebar-link">
-                                <i class="fa-solid fa-clipboard-list"></i>
-                                <span class="hide-menu">Inventário</span>
-                            </a>
-                        </li>
-
-                        <!-- Menu - Estoque -->
-                        <li class="sidebar-item">
-                            <a href="?controle=s&acao=dashboard" class="sidebar-link">
-                                <i class="fa-solid fa-boxes-stacked"></i>
-                                <span class="hide-menu">Estoque</span>
-                            </a>
-                        </li>
-                        
-                        <!-- Menu - Pontos -->
-                        <li class="sidebar-item">
-                            <a href="?controle=ponto&acao=listar" class="sidebar-link">
-                                <i class="fas fa-building" aria-hidden="true"></i>
-                                <span class="hide-menu">Pontos</span>
-                            </a>
-                        </li>
                         <?php if(Security::usuario()['perfil'] == 1){ 
                         // Usuários
                         echo "<li class='sidebar-item'> <a class='sidebar-link waves-effect waves-dark sidebar-link' href='index.php?controle=usuario&acao=listar' aria-expanded='false'><i class='fa fa-users' aria-hidden='true'></i><span class='hide-menu'>Usuários</span></a></li>";

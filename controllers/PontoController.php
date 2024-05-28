@@ -82,5 +82,22 @@ public function excluir()
         Util::redirect('index.php?controle=ponto&acao=listar');
     }
 }
+// Filtro do ponto
+public function filtro(){
+    // Filtro
+    $palavra_chave = isset($_POST["pesquisa"]) ? htmlspecialchars($_POST["pesquisa"]) : null;
 
+    // Carrega os finalizados com o filtro
+    $this->pagination = new Pagination("ponto", null, array());
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    // Adiciona o filtro por palavra-chave, se estiver definido
+    if ($palavra_chave !== null) {
+        $this->pagination->filters[] = "nome LIKE '%" . $palavra_chave . "%'";
+    }
+    $this->pagination->load();
+    
+    $db = Database::getConn();
+    // Renderiza a view
+    $this->render('ponto/lista', 'default');
+}
 }

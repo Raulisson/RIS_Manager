@@ -16,6 +16,13 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
+			<form method="POST" action="?controle=ponto&acao=filtro">
+                <div class="col-md-2">
+                    <label>Nome do Ponto:</label>
+                    <input type="text" name="pesquisa" class="form-control">
+                    <button type="submit" class="btn btn-secondary m-1">Filtrar</button>
+                </div>
+            </form>
 			<div class="white-box">
 				<div class="table-responsive">
 

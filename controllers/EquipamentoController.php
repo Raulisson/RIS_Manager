@@ -314,4 +314,22 @@ public function excluirModem()
         Util::redirect('index.php?controle=equipamento&acao=listarModem');
     }
 }
+// Filtro do ponto dos modens
+public function filtroModem(){
+    // Filtro
+    $palavra_chave = isset($_POST["pesquisa"]) ? htmlspecialchars($_POST["pesquisa"]) : null;
+
+    // Carrega os finalizados com o filtro
+    $this->pagination = new Pagination("modem", null, array());
+    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+    // Adiciona o filtro por palavra-chave, se estiver definido
+    if ($palavra_chave !== null) {
+        $this->pagination->filters[] = "id_ponto LIKE '%" . $palavra_chave . "%'";
+    }
+    $this->pagination->load();
+    
+    $db = Database::getConn();
+    // Renderiza a view
+    $this->render('equipamentos/lista_modem', 'default');
+}
 }
