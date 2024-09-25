@@ -218,7 +218,16 @@
                                         <span class="hide-menu">Outros Equipamentos</span>
                                     </a>
                                 </li>
+                                
                             </ul>
+
+                            <!-- Menu - Conversão -->
+                            <li class="sidebar-item">
+                                <a href="?controle=conversao&acao=index" class="sidebar-link">
+                                    <i class="fa-solid fa-wifi"></i>
+                                    <span class="hide-menu">Gerador ingressos</span>
+                                </a>
+                            </li>
                         </li>
 
                         <?php if(Security::usuario()['perfil'] == 1){ 
