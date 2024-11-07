@@ -57,9 +57,9 @@ public function conversao()
             $pageWidth = 297;  // Largura da página em mm (A4 landscape)
             $pageHeight = 210; // Altura da página em mm (A4 landscape)
         
-            // Tamanho da imagem que você quer adicionar (ajuste conforme necessário)
-            $imageWidth = 192;  // Largura da imagem (ajustável)
-            $imageHeight = 108; // Altura da imagem (ajustável)
+            // Tamanho da imagem que você quer adicionar
+            $imageWidth = 192;  // Largura da imagem
+            $imageHeight = 108; // Altura da imagem
         
             // Calcula as coordenadas para centralizar a imagem
             $x = ($pageWidth - $imageWidth) / 2;   // Centraliza horizontalmente
@@ -69,8 +69,8 @@ public function conversao()
             $pdf->Image($imageFilePath, $x, $y, $imageWidth, $imageHeight);
         
             // Adicionar o código no centro da imagem com cor branca
-            $pdf->SetFont('helvetica', 'B', 25);
-            $pdf->SetTextColor(255, 255, 255); // Definir a cor do texto para branco
+            $pdf->SetFont('helvetica', 'B', 20);
+            $pdf->SetTextColor(255, 255, 255);
             $pdf->SetXY($x + 5, $y + ($imageHeight / 2) + 03);
             $pdf->Cell($imageWidth, 10, $code, 0, 1, 'C');
         
