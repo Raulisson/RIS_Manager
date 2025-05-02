@@ -45,6 +45,8 @@ class UsuarioController extends AbstractController
     {
         if(Security::usuario()['perfil'] == 1){
         // Carrega os usuários
+        $db = Database::getConn();
+        $this->perfil = $db->acl_grupo()->order('id');
         $this->pagination = new Pagination("usuario", null, array());
         $this->pagination->columnsFilters = array("id", "nome", "email");
         $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa

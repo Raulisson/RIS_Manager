@@ -121,6 +121,7 @@
                                 ?>
                             </a>
                         </li>
+                        <?php if(Security::usuario()['perfil'] == 1 || Security::usuario()['perfil'] == 2): ?>
                         <!-- Atividades -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -154,7 +155,8 @@
                                 </li>
                             </ul>
                         </li>
-                        
+                        <?php endif; ?>
+                        <?php if(Security::usuario()['perfil'] == 1): ?>
                         <!-- Menu - Pontos -->
                         <li class="sidebar-item">
                             <a href="?controle=ponto&acao=listar" class="sidebar-link">
@@ -229,7 +231,16 @@
                                 </a>
                             </li>
                         </li>
-
+                        <?php endif; ?>
+                        <?php if(Security::usuario()['perfil'] == 1 || Security::usuario()['perfil'] == 2): ?>
+                        <!-- Menu - Clientes -->
+                            <li class="sidebar-item">
+                                <a href="?controle=cliente&acao=listar" class="sidebar-link">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span class="hide-menu">Clientes</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <?php if(Security::usuario()['perfil'] == 1){ 
                         // Usuários
                         echo "<li class='sidebar-item'> <a class='sidebar-link waves-effect waves-dark sidebar-link' href='index.php?controle=usuario&acao=listar' aria-expanded='false'><i class='fa fa-users' aria-hidden='true'></i><span class='hide-menu'>Usuários</span></a></li>";

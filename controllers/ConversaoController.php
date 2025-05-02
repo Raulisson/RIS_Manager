@@ -7,10 +7,11 @@ class ConversaoController extends AbstractController
 // index
 public function index()
 {
-    
-    $db = Database::getConn();
-    // Renderiza a view
-    $this->render('conversao/ingressos', 'default');
+    if(Security::usuario()['perfil'] == 1){
+        $db = Database::getConn();
+        // Renderiza a view
+        $this->render('conversao/ingressos', 'default');
+    }
 }
 
 public function conversao()
