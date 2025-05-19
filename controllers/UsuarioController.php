@@ -238,7 +238,7 @@ class UsuarioController extends AbstractController
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'naoresponda.cbdooh@gmail.com';
-                $mail->Password   = 'klpe pgme uswk jolk';
+                $mail->Password   = '';
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465;
 
