@@ -13,7 +13,7 @@
 				<div class="table-responsive">
 
 					<!-- Form -->
-					<form id="frmUsuario" method="post" action="index.php?controle=usuario&acao=salvar" autocomplete="off">
+					<form id="frmUsuario" method="post" action="index.php?controle=usuario&acao=convidar" autocomplete="off">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="card mb-4">
@@ -35,27 +35,8 @@
 												<label for="email" class="ul-form__label p-0"><span>*</span> E-mail:</label>
 												<input type="email" class="form-control" name="email" id="email" value="<?php if (isset($this->usuario))
 																															echo $this->usuario['email'] ?>" required maxlength="100">
-											</div>
+												<div id="erro-email" class="text-danger small mt-1"></div>	
 										</div>
-
-										<div class="row mt-3">
-											<!-- Senha -->
-											<div class="form-group col-md-6 campo-senha" <?php if (isset($this->usuario))
-																								echo "style='display:none'" ?>>
-												<label for="senha" class="ul-form__label p-0">
-													<span>*</span> Senha:
-												</label>
-												<input type="password" class="form-control" name="senha" id="senha" value="" autocomplete="new-password">
-											</div>
-
-											<!-- Confirmação da senha -->
-											<div class="form-group col-md-6 campo-senha" <?php if (isset($this->usuario))
-																								echo "style='display:none'" ?>>
-												<label for="confirmarSenha" class="ul-form__label p-0">
-													<span>*</span> Confirmação da senha:
-												</label>
-												<input type="password" class="form-control" name="confirmarSenha" id="confirmarSenha" value="" autocomplete="new-password">
-											</div>
 										</div>
 
 
@@ -116,7 +97,7 @@
 		var usuarioId = null;
 		<?php if (isset($this->usuario)) echo "usuarioId = " . $this->usuario["id"] . ";\n"; ?>
 		$.ajax({
-			url: "?controle=usuario&acao=checar-email",
+			url: "?controle=usuario&acao=checarEmail",
 			method: "get",
 			async: false,
 			data: {
@@ -128,9 +109,10 @@
 
 					// E-mail em uso
 					e.preventDefault();
-					toastr.warning("Esse e-mail já está cadastrado. Utilize outro.", "Atenção");
+					$("#erro-email").text("Esse e-mail já está cadastrado. Utilize outro.");
 				}
 			}
 		});
 	});
 </script>
+

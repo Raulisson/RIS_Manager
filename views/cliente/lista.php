@@ -16,6 +16,19 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
+			<form method="GET" action="index.php">
+				<input type="hidden" name="controle" value="cliente">
+				<input type="hidden" name="acao" value="listar">
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<input type="text" placeholder="Pesquisar empresa cliente" name="search" class="form-control"value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary">Buscar</button>
+					</div>
+				</div>
+			</form>
+</br>
 			<div class="white-box">
 				<div class="table-responsive">
 
@@ -41,6 +54,9 @@
 								<th scope="col">
 									<?php echo $this->pagination->column("vendedor", "Vendedor") ?>
 								</th>
+								<th scope="col">
+									<?php echo $this->pagination->column("data_encerramento", "Último encerramento de venda") ?>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -50,7 +66,7 @@
 								echo "<td>{$cliente['id']}</td>";
 								echo "<td>" . utf8_encode($cliente['nome']) . "</td>";
 								echo "<td>" . utf8_encode($cliente['email']) . "</td>";
-								echo "<td>" . utf8_encode($cliente['empresa']) . "</td>";
+								echo "<td>" . $cliente['empresa'] . "</td>";
 								echo "<td>" . utf8_encode($cliente['numero']) . "</td>";
                                 if($cliente['id_vendedor']){
                                     foreach($this->vendedores as $vendedor){
@@ -61,12 +77,18 @@
                                 }else{
                                     echo "<td> Cliente fora da carteira </td>";
                                 }
-								
-								echo "<td class='text-right pr-5'>
-									<a class='text-16 mt-2 font-weight-bold' href='index.php?controle=cliente&acao=form&id={$cliente['id']}'>Editar</a>";
-                                    if ($usuario['perfil'] = "1") {
-                                        echo "<a class='text-16 ml-3 mt-2 font-weight-bold text-danger' href='javascript:remove({$cliente['id']})'>Excluir</a>";
-                                    }
+								if($cliente['data_encerramento'] && $cliente['data_encerramento'] != '0000-00-00'){
+                                    echo "<td>" . date('d/m/Y', strtotime($cliente['data_encerramento'])) . "</td>";
+                                }else{
+                                    echo "<td> Cliente sem última venda registrada </td>";
+                                }
+								echo "<td class='text-right pr-1'>";
+								echo "<a class='text-16 mt-2 ml-3 font-weight-bold' href='index.php?controle=cliente&acao=visualizar&id={$cliente['id']}'>Visualizar</a>";
+									echo "<a class='text-16 mt-2 ml-3 font-weight-bold' href='index.php?controle=cliente&acao=form&id={$cliente['id']}&visualizar=1'>+Venda</a>";
+										echo "<a class='text-16 ml-3 mt-2 font-weight-bold' href='index.php?controle=cliente&acao=form&id={$cliente['id']}'>Editar</a>";
+										if (Security::usuario()['perfil'] == 1) {
+                                    		echo "<a class='text-16 ml-3 mt-2 font-weight-bold text-danger' href='javascript:remove({$cliente['id']})'>Excluir</a>";
+                                    	}
 								echo "</td>";
 								echo "</tr>";
 							}

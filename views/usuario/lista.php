@@ -1,12 +1,15 @@
 <div class="page-breadcrumb bg-white p-4">
 	<div class="row align-items-center">
-		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+		<div class="col-lg-10 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title text-uppercase font-medium font-14">Usuários</h4>
 		</div>
-		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+		<div class="col-lg-2 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<a href="?controle=usuario&acao=form" class="btn btn-primary ml-auto">
 					Adicionar
+				</a>
+				<a href="?controle=usuario&acao=convite" class="btn btn-primary ml-auto">
+					Convidar
 				</a>
 			</div>
 		</div>

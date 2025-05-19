@@ -1,4 +1,10 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once('../library/php-mailer/src/PHPMailer.php');
+require_once('../library/php-mailer/src/SMTP.php');
+require_once('../library/php-mailer/src/Exception.php');
 
 class UsuarioController extends AbstractController
 {
@@ -108,6 +114,21 @@ class UsuarioController extends AbstractController
         $this->render('usuario/form');
     }
 
+     public function convite()
+    {
+        $db = Database::getConn();
+        // Carrega os grupos
+        $gruposDb = $db->acl_grupo()->where("publico = 1")->order("nome");
+        $this->grupos = array();
+        foreach ($gruposDb as $grupoDb) {
+            $this->grupos[] = array(
+                "id" => $grupoDb["id"],
+                "nome" => htmlspecialchars(utf8_encode($grupoDb["nome"]))
+            );
+        }
+        $this->render('usuario/convidar');
+    }
+
     /**
      * Salva um usuário
      */
@@ -176,4 +197,135 @@ class UsuarioController extends AbstractController
             Util::redirect('index.php?controle=usuario&acao=listar');
         }
     }
+
+    public function convidar()
+    {
+        $db = Database::getConn();
+
+        if ($_POST['email'] && $_POST['nome'] && $_POST['perfil']) {
+            $email  = utf8_decode($_POST['email']);
+            $nome   = utf8_decode($_POST['nome']);
+            $perfil = $_POST['perfil'];
+            $plano  = 4;
+            $token  = bin2hex(random_bytes(32));
+            $senhaTemporaria = substr(md5(rand()), 0, 8);
+
+            $usuario = array(
+                'id_empresa'       => Security::usuario()['id_empresa'],
+                'nome'             => $nome,
+                'email'            => $email,
+                'perfil'           => $perfil,
+                'id_plano'         => $plano,
+                'senha'            => sha1(md5($senhaTemporaria)),
+                'token'            => $token
+            );
+
+            $usuarioId = $db->usuario()->insert($usuario);
+
+            // Enviar email com o link
+            $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+            $host = $_SERVER['HTTP_HOST'];
+
+            $link = "$protocolo://$host/public/index.php?controle=usuario&acao=definirSenha&token=$token";
+
+            $mensagem = "Olá $nome,<br><br>Você foi convidado para acessar o sistema. Clique no link abaixo para definir sua senha:<br><a href='$link'>$link</a>";
+
+            try {
+                $mail = new PHPMailer(true);
+
+                // Configurações do servidor SMTP
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'naoresponda.cbdooh@gmail.com';
+                $mail->Password   = 'klpe pgme uswk jolk';
+                $mail->SMTPSecure = 'ssl';
+                $mail->Port       = 465;
+
+                // Remetente e destinatário
+                $mail->setFrom('naoresponda.cbdooh@gmail.com', 'CB.DOOH - Sistema');
+                $mail->addAddress($email, $nome);
+
+                // Conteúdo
+                $mail->isHTML(true);
+                $mail->CharSet = 'UTF-8';
+                $mail->Subject = 'Definição de senha';
+
+                // Corpo do e-mail
+                $mail->Body = "
+                    <p>Olá, <strong>$nome</strong>.</p>
+                    <p>Você foi cadastrado no sistema da cb.dooh e precisa definir sua senha de acesso.</p>
+                    <p>
+                        <a href='$link' style='
+                            padding: 10px 20px;
+                            background-color: #007BFF;
+                            color: #fff;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            display: inline-block;
+                        '>Clique aqui para definir sua senha</a>
+                    </p>
+                    <p>Se você não reconhece essa solicitação, apenas ignore este e-mail.</p>
+                ";
+
+                $mail->AltBody = "Olá, $nome. Acesse o seguinte link para definir sua senha: $link";
+
+                $mail->send();
+                
+                Util::redirect('index.php?controle=usuario&acao=listar');
+            } catch (Exception $e) {
+                error_log("Erro ao enviar e-mail de definição de senha: {$mail->ErrorInfo}");
+                
+            }
+            Util::redirect('index.php?controle=usuario&acao=listar');
+        }
+    }
+
+    public function definirSenha()
+    {
+        $db = Database::getConn();
+        
+        if (!isset($_GET['token'])) {
+            $this->render('usuario/login', 'basic');
+        }
+
+        $usuario = $db->usuario('token', $_GET['token'])->fetch();
+
+        if (!$usuario) {
+            Util::erro("Token não encontrado ou expirado.");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $usuario['senha'] = sha1(md5($_POST['senha']));
+            $usuario['token'] = null;
+
+            $usuario->update();
+
+            Util::redirect("index.php?controle=usuario&acao=login");
+        }
+
+        // Renderizar formulário de definição de senha
+        $this->render('usuario/definirSenha', 'basic');
+    }
+    
+    public function checarEmail()
+    {
+        $db = Database::getConn();
+
+        // Pega os dados enviados via GET
+        $email = isset($_GET['email']) ? trim($_GET['email']) : '';
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+        // Verifica se o e-mail está sendo usado por outro cliente (excluindo o atual, se for edição)
+        $usuarioExistente = $db->usuario()
+            ->where('email = ?', $email)
+            ->where('id != ?', $id)
+            ->fetch();
+
+        // Retorna 1 se estiver disponível, 0 se já existir
+        echo $usuarioExistente ? "0" : "1";
+        exit;
+    }
+
 }

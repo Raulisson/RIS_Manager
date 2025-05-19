@@ -51,7 +51,7 @@
 						<input type="hidden" id="event_id" name="event_id" value="">
 							<!-- Select Ponto já cadastrado -->
 						<div class="form-group col-md-12">
-							<label for="local" class="ul-form__label p-0"><span>*</span> Local de Atendimento:</label>
+							<label for="local" class="ul-form__label p-0"><span>*</span> Atendimento:</label>
 							<input type="text" class="form-control" name="local" id="local" required>
 						</div>
 						<!-- Data/Hora -->
@@ -105,7 +105,7 @@
 							<input type="hidden" id="edit_event_id" name="event_id" value="">
 							<!-- Campos para edição -->
 							<div class="form-group col-md-12">
-								<label for="local" class="ul-form__label p-0"><span>*</span> Local de Atendimento:</label>
+								<label for="local" class="ul-form__label p-0"><span>*</span> Atendimento:</label>
 								<input type="text" class="form-control" name="local" id="edit_local" required>
 							</div>
 							<div class="form-group col-md-12">

@@ -26,14 +26,14 @@
 											<!-- Nome -->
 											<div class="form-group col-md-6">
 												<label for="nome" class="ul-form__label p-0"><span>*</span> Nome:</label>
-												<input  <?= $this->bloquear ? 'readonly' : '' ?> type="text" placeholder="Nome do contato" class="form-control" name="nome" id="nome" value="<?php if (isset($this->cliente))
+												<input  disabled type="text" class="form-control" name="nome" id="nome" value="<?php if (isset($this->cliente))
 																															echo $this->cliente['nome'] ?>" required maxlength="50">
 											</div>
 
 											<!-- E-mail -->
 											<div class="form-group col-md-6">
 												<label for="email" class="ul-form__label p-0"><span>*</span> E-mail:</label>
-												<input type="email" <?= $this->bloquear ? 'readonly' : '' ?> class="form-control" name="email" id="email" value="<?php if (isset($this->cliente)) echo $this->cliente['email'] ?>" required maxlength="100">
+												<input disabled type="email"  class="form-control" name="email" id="email" value="<?php if (isset($this->cliente)) echo $this->cliente['email'] ?>" required maxlength="100">
 												<div id="erro-email" class="text-danger small mt-1"></div>
 											</div>
 										</div>
@@ -43,14 +43,14 @@
 											<!-- Número -->
 											<div class="form-group col-md-6">
 												<label for="numero" class="ul-form__label p-0"><span>*</span> Número:</label>
-												<input placeholder="Número do contato" type="text" <?= $this->bloquear ? 'readonly' : '' ?> class="form-control" name="numero" id="numero" value="<?php if (isset($this->cliente))
+												<input disabled type="text"  class="form-control" name="numero" id="numero" value="<?php if (isset($this->cliente))
 																															echo $this->cliente['numero'] ?>" required maxlength="50">
 											</div>
 
 											<!-- Empresa -->
 											<div class="form-group col-md-6">
 												<label for="empresa" class="ul-form__label p-0"><span>*</span> Empresa:</label>
-												<input type="text" <?= $this->bloquear ? 'readonly' : '' ?> class="form-control" name="empresa" id="empresa" value="<?php if (isset($this->cliente))
+												<input disabled type="text"  class="form-control" name="empresa" id="empresa" value="<?php if (isset($this->cliente))
 																															echo $this->cliente['empresa'] ?>" required maxlength="100">
 											</div>
 										</div>
@@ -60,14 +60,14 @@
 											<!-- CNPJ -->
 											<div class="form-group col-md-6">
 												<label for="cnpj" class="ul-form__label p-0"><span>*</span> CNPJ:</label>
-												<input type="text" <?= $this->bloquear ? 'readonly' : '' ?> class="form-control" name="cnpj" id="cnpj" value="<?php if (isset($this->cliente))
+												<input disabled type="text"  class="form-control" name="cnpj" id="cnpj" value="<?php if (isset($this->cliente))
 																															echo $this->cliente['cnpj'] ?>" required maxlength="50">
 											</div>
 
 											<!-- Razão Social -->
 											<div class="form-group col-md-6">
 												<label for="razao_social" class="ul-form__label p-0"><span>*</span> Razão Social:</label>
-												<input type="text" <?= $this->bloquear ? 'readonly' : '' ?> class="form-control" name="razao_social" id="razao_social" value="<?php if (isset($this->cliente))
+												<input disabled type="text"  class="form-control" name="razao_social" id="razao_social" value="<?php if (isset($this->cliente))
 																															echo $this->cliente['razao_social'] ?>" required maxlength="100">
 											</div>
 										</div>
@@ -77,7 +77,7 @@
 											<!-- Vendedor -->
 											<div class="form-group col-md-6 campo-grupo">
 												<label for="vendedor_id" class="ul-form__label p-0"><span>*</span> Vendedor:</label>
-												<select <?= $this->bloquear ? 'disabled' : '' ?> name="vendedor_id" id="vendedor_id" class="form-control"  autocomplete="off">
+												<select disabled name="vendedor_id" id="vendedor_id" class="form-control"  autocomplete="off">
 													<option value="">Sem vendedor</option>
 													<?php foreach($this->vendedores as $vendedor): ?>
 														<option value="<?= htmlspecialchars($vendedor['id']) ?>" 
@@ -86,38 +86,18 @@
 														</option>
 													<?php endforeach; ?>
 												</select>
-												<?php if ($this->bloquear): ?>
-													<!-- Campo oculto para manter o valor no POST -->
-													<input type="hidden" name="vendedor_id" value="<?= htmlspecialchars($this->cliente['id_vendedor']) ?>">
-												<?php endif; ?>
 											</div>
-
-											<!-- Compra -->
-											<div class="form-group col-md-6">
-												<label for="compra" class="ul-form__label p-0"><span>*</span> O que foi comprado:</label>
-												<input type="text" class="form-control" name="compra" id="compra" value="" maxlength="250">
-											</div>
-
-										</div>
-
-										<div class="row">
-
-											<!-- Observação -->
-											<div class="form-group col-md-6">
-												<label for="observacao" class="ul-form__label p-0"><span>*</span> Adicione uma observação sobre a venda:</label>
-												<textarea class="form-control" name="observacao" id="observacao" required maxlength="500" rows="6"></textarea>
-											</div>
-
 
 											<!-- Situação -->
 											<div class="form-group col-md-6 campo-grupo">
 												<label for="situacao" class="ul-form__label p-0"><span>*</span> Situação do cliente:</label>
-												<select name="situacao" id="situacao" class="form-control" autocomplete="off">
+												<select disabled name="situacao" id="situacao" class="form-control" autocomplete="off">
 													<option value="0" <?= (!isset($this->cliente['situacao']) || $this->cliente['situacao'] == '0') ? 'selected' : '' ?>>Prospecção</option>
 													<option value="1" <?= (isset($this->cliente['situacao']) && $this->cliente['situacao'] == '1') ? 'selected' : '' ?>>Venda ativa</option>
 													<option value="2" <?= (isset($this->cliente['situacao']) && $this->cliente['situacao'] == '2') ? 'selected' : '' ?>>Venda inativa</option>
 												</select>
 											</div>
+
 										</div>
 
 										
@@ -197,58 +177,5 @@
 		</div>
 	</div>
 </div>
-<script>
-	$("#frmcliente").on("submit", function(e) {
-		var clienteId = null;
-		<?php if (isset($this->cliente)) echo "clienteId = " . $this->cliente["id"] . ";\n"; ?>
 
-		// Limpa mensagem anterior
-		$("#erro-email").text("");
-
-		$.ajax({
-			url: "?controle=cliente&acao=checar-email",
-			method: "get",
-			async: false,
-			data: {
-				id: clienteId,
-				email: $("[name=email]").val()
-			},
-			success: function(rs) {
-				if (rs == "0") {
-					e.preventDefault();
-					$("#erro-email").text("Esse e-mail já está cadastrado. Utilize outro.");
-				}
-			}
-		});
-	});
-</script>
-<script>
-$(document).ready(function() {
-	function toggleDataEncerramento() {
-		let situacao = $('#situacao').val();
-		if (situacao === "1") {
-			$('#encerramento-wrapper').slideDown();
-		} else {
-			$('#encerramento-wrapper').slideUp();
-			$('#data_encerramento').val('');
-		}
-	}
-
-	// Executa ao carregar a página
-	toggleDataEncerramento();
-
-	// Executa ao mudar o select
-	$('#situacao').on('change', toggleDataEncerramento);
-});
-</script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $('#cnpj').mask('00.000.000/0000-00');
-    });
-	$(document).ready(function(){
-        $('#numero').mask('(00)00000-0000');
-    });
-</script>
 

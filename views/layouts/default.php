@@ -181,13 +181,13 @@
                             </a>
                         </li>
 
-                        <!-- Menu - Modens -->
+                        <!-- Menu - Modens 
                         <li class="sidebar-item">
                             <a href="?controle=equipamento&acao=listarModem" class="sidebar-link">
                                 <i class="fa-solid fa-wifi"></i>
                                 <span class="hide-menu">Modens</span>
                             </a>
-                        </li>
+                        </li>-->
                         
                         <!-- Equipamentos -->
                         <li class="sidebar-item">
@@ -232,7 +232,7 @@
                             </li>
                         </li>
                         <?php endif; ?>
-                        <?php if(Security::usuario()['perfil'] == 1 || Security::usuario()['perfil'] == 2): ?>
+                        <?php if(Security::usuario()['perfil'] == 1 || Security::usuario()['perfil'] == 3): ?>
                         <!-- Menu - Clientes -->
                             <li class="sidebar-item">
                                 <a href="?controle=cliente&acao=listar" class="sidebar-link">
@@ -240,11 +240,21 @@
                                     <span class="hide-menu">Clientes</span>
                                 </a>
                             </li>
+                        <!-- Menu - Carteira -->
+                            <li class="sidebar-item">
+                                <a href="?controle=cliente&acao=carteira" class="sidebar-link">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span class="hide-menu">Minha carteira</span>
+                                </a>
+                            </li>
                         <?php endif; ?>
                         <?php if(Security::usuario()['perfil'] == 1){ 
+                        
+                        // Vendedores
+                        echo "<li class='sidebar-item'> <a class='sidebar-link waves-effect waves-dark sidebar-link' href='index.php?controle=vendedor&acao=listar' aria-expanded='false'><i class='fa-solid fa-user-tie' aria-hidden='true'></i><span class='hide-menu'>Vendedores</span></a></li>";
+                        
                         // Usuários
                         echo "<li class='sidebar-item'> <a class='sidebar-link waves-effect waves-dark sidebar-link' href='index.php?controle=usuario&acao=listar' aria-expanded='false'><i class='fa fa-users' aria-hidden='true'></i><span class='hide-menu'>Usuários</span></a></li>";
-                                                
                         }
                         ?>
                         <!-- Sair -->
@@ -269,7 +279,7 @@
 
             <!-- Footer -->
             <footer class="footer text-center">
-            Desenvolvido por <a href="https://twitter.com/Raulissin" target="_blank">https://twitter.com/Raulissin</a>
+            Desenvolvido por Raulisson
             </footer>
         
         </div>

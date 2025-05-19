@@ -4,7 +4,7 @@
 
         // Ações públicas
         private static $public = array(
-            'usuario'   => array('login', 'autenticar', 'sair','checar-atividade'),
+            'usuario'   => array('login', 'autenticar', 'sair','checar-atividade', 'definirSenha'),
         );
 
         // Permissões

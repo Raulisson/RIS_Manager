@@ -14,7 +14,13 @@ class AtividadeController extends AbstractController
     {
         $db = Database::getConn();
         $events = array();
-        $bookings = $db->bookings()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("created_at");
+        if(Security::usuario()['perfil'] == '1'){
+            $bookings = $db->bookings()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("created_at");
+        }else if(Security::usuario()['perfil'] == '3'){
+            $bookings = $db->bookings()->where("id_usuario = " . Security::usuario()['id'])->order("created_at");
+        }else if(Security::usuario()['perfil'] == '2'){
+            $bookings = $db->bookings()->where("id_perfil = " . Security::usuario()['perfil'])->order("created_at");
+        }
         foreach($bookings as $booking) {
             $color = null;
             if($booking["ativo"] == '0') {
@@ -60,7 +66,9 @@ class AtividadeController extends AbstractController
         $ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0;
         $prioridade = $_POST['prioridade'];
         $id_empresa = Security::usuario()['id_empresa'];
-
+        $id_usuario = Security::usuario()['id'];
+        $id_perfil = Security::usuario()['perfil'];
+        
         // Obtém o horário atual
         $currentDateTime = date('Y-m-d H:i:s');
         
@@ -73,7 +81,9 @@ class AtividadeController extends AbstractController
             'prioridade' => $prioridade,
             'created_at' => $currentDateTime,
             'updated_at' => $currentDateTime,
-            'id_empresa' => $id_empresa
+            'id_empresa' => $id_empresa,
+            'id_usuario' => $id_usuario,
+            'id_perfil' => $id_perfil
         ];
 
         // Insere os dados no banco de dados
@@ -127,6 +137,8 @@ public function editarAtividade()
         $ativo = isset($_POST['edit_ativo']) ? $_POST['edit_ativo'] : 0;
         $prioridade = $_POST['edit_prioridade'];
         $id_empresa = Security::usuario()['id_empresa'];
+        $id_usuario = Security::usuario()['id'];
+        $id_perfil = Security::usuario()['perfil'];
 
         // Obtém o horário atual
         $currentDateTime = date('Y-m-d H:i:s');
@@ -140,7 +152,9 @@ public function editarAtividade()
             'ativo' => $ativo,
             'prioridade' => $prioridade,
             'created_at' => $currentDateTime,
-            'id_empresa' => $id_empresa
+            'id_empresa' => $id_empresa,
+            'id_usuario' => $id_usuario,
+            'id_perfil' => $id_perfil
         ]);
 
         if ($result) {
@@ -190,6 +204,8 @@ public function pendenciar()
         $prioridade = $_POST['prioridade'];
         $currentDateTime = date('Y-m-d H:i:s');
         $id_empresa = Security::usuario()['id_empresa'];
+        $id_usuario = Security::usuario()['id'];
+        $id_perfil = Security::usuario()['perfil'];
 
         // Primeiro, edita a atividade atual, mudando a coluna "ativo" para 0
         $db = Database::getConn();
@@ -204,7 +220,9 @@ public function pendenciar()
                 'prioridade' => $prioridade,
                 'created_at' => $currentDateTime, // Adiciona o horário atual para 'created_at'
                 'updated_at' => $currentDateTime,
-                'id_empresa' => $id_empresa
+                'id_empresa' => $id_empresa,
+                'id_usuario' => $id_empresa,
+                'id_perfil' => $id_empresa
             ]);
 
             if ($atividadePendente) {
