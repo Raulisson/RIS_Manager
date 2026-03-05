@@ -238,12 +238,12 @@ class UsuarioController extends AbstractController
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'naoresponda.cbdooh@gmail.com';
-                $mail->Password   = '';
+                $mail->Password   = 'onam fyya mgce nede';
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465;
 
                 // Remetente e destinatário
-                $mail->setFrom('naoresponda.cbdooh@gmail.com', 'CB.DOOH - Sistema');
+                $mail->setFrom('naoresponda.cbdooh@gmail.com', 'RVA - Sistema');
                 $mail->addAddress($email, $nome);
 
                 // Conteúdo
@@ -254,7 +254,7 @@ class UsuarioController extends AbstractController
                 // Corpo do e-mail
                 $mail->Body = "
                     <p>Olá, <strong>$nome</strong>.</p>
-                    <p>Você foi cadastrado no sistema da cb.dooh e precisa definir sua senha de acesso.</p>
+                    <p>Você foi cadastrado no sistema de gestão e precisa definir sua senha de acesso.</p>
                     <p>
                         <a href='$link' style='
                             padding: 10px 20px;

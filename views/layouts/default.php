@@ -7,9 +7,9 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
-    <title>RIS</title>
+    <title>RVA</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="./images/favico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon.png">
     <!-- Custom CSS -->
     <link href="assets/resources/select2/css/select2.min.css" rel="stylesheet">
     <link href="assets/css/style.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@
                         <!-- Logo icon -->
                         <b class="logo-icon" style="width:100%;text-align:center;">
                             <!-- Dark Logo icon -->
-                            <img src="./assets/images/logo.png" style="width:100px;height:70px;" />
+                            <img src="./assets/images/logo1.png" style="width:100px;height:70px;" />
                         </b>
                         <!--End Logo icon -->
                     </a>
@@ -173,63 +173,21 @@
                             </a>
                         </li>
 
-                        <!-- Menu - Estoque -->
+                        <!-- Menu - Estoque 
                         <li class="sidebar-item">
                             <a href="?controle=inventario&acao=estoque" class="sidebar-link">
                                 <i class="fa-solid fa-boxes-stacked"></i>
                                 <span class="hide-menu">Estoque</span>
                             </a>
-                        </li>
+                        </li>   -->
 
-                        <!-- Menu - Modens 
-                        <li class="sidebar-item">
-                            <a href="?controle=equipamento&acao=listarModem" class="sidebar-link">
-                                <i class="fa-solid fa-wifi"></i>
-                                <span class="hide-menu">Modens</span>
-                            </a>
-                        </li>-->
-                        
-                        <!-- Equipamentos -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                            <i class="fa-solid fa-tv"></i>
-                                <span class="hide-menu">Equipamentos</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-
-                                <!-- Menu Telas -->
-                                <li class="sidebar-item">
-                                    <a href="?controle=equipamento&acao=listarTela" class="sidebar-link">
-                                        <i class="mdi mdi-border-top"></i>
-                                        <span class="hide-menu">Lista de Telas</span>
-                                    </a>
-                                </li>
-
-                                <!-- Menu - Computadores -->
-                                <li class="sidebar-item">
-                                    <a href="?controle=equipamento&acao=listarComputador" class="sidebar-link">
-                                        <i class="mdi mdi-border-top"></i>
-                                        <span class="hide-menu">Lista de Computadores</span>
-                                    </a>
-                                </li>
-
-                                <!-- Menu - Dispositivos -->
-                                <li class="sidebar-item">
-                                    <a href="?controle=equipamento&acao=listarEquipamento" class="sidebar-link">
-                                        <i class="mdi mdi-border-top"></i>
-                                        <span class="hide-menu">Outros Equipamentos</span>
-                                    </a>
-                                </li>
-                                
-                            </ul>
-
-                            <!-- Menu - Conversão -->
+                            <!-- Menu - Conversão 
                             <li class="sidebar-item">
                                 <a href="?controle=conversao&acao=index" class="sidebar-link">
                                     <i class="fa-solid fa-wifi"></i>
                                     <span class="hide-menu">Gerador ingressos</span>
                                 </a>
-                            </li>
+                            </li>   -->
                         </li>
                         <?php endif; ?>
                         <?php if(Security::usuario()['perfil'] == 1 || Security::usuario()['perfil'] == 3): ?>

@@ -8,6 +8,11 @@ public function listar()
     // Carrega os pontos
     $this->pagination = new Pagination("ponto", null, array());
     $this->pagination->columnsFilters = array("Nome");
+
+    if (!empty($_GET['searchname'])) {
+                $filtroNome = $_GET['searchname'];
+                $this->pagination->filters[] = "nome LIKE '%" . $filtroNome . "%'";
+    }
     $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
     $this->pagination->load();
     

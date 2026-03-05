@@ -5,13 +5,47 @@ class InventarioController extends AbstractController
 // Lista do inventario
 public function listar()
 {
+    $db = Database::getConn(true);
     // Carrega o inventario
     $this->pagination = new Pagination("inventario", null, array());
     $this->pagination->columnsFilters = array("data");
+
+    if (!empty($_GET['search'])) {
+        $filtro = trim($_GET['search']);
+
+        if (mb_strtolower($filtro) === 'estoque') {
+            // Quando a busca for "estoque", filtra onde id_ponto é NULL
+            $this->pagination->filters[] = "id_ponto IS NULL";
+        } else {
+            // Busca todos os pontos cujo nome contenha o termo
+            $pontosDb = $db->ponto()->where("nome LIKE ?", "%$filtro%");
+
+            // Extrai os IDs em um array
+            $ids = [];
+            foreach ($pontosDb as $ponto) {
+                $ids[] = $ponto['id'];
+            }
+
+            // Aplica o filtro se houver resultados
+            if (!empty($ids)) {
+                $idsStr = implode(',', $ids); // Ex: "2,5,9"
+                $this->pagination->filters[] = "id_ponto IN ($idsStr)";
+            } else {
+                // Nenhum ponto encontrado, força resultado vazio
+                $this->pagination->filters[] = "0 = 1";
+            }
+        }
+    }
+    
+    if (!empty($_GET['searchname'])) {
+                $filtroNome = $_GET['searchname'];
+                $this->pagination->filters[] = "nome LIKE '%" . $filtroNome . "%'";
+        }
+
     $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
     $this->pagination->load();
     
-    $db = Database::getConn(true);
+    
     // Renderiza a view
     $this->render('inventario/lista', 'default');
 }
@@ -40,44 +74,11 @@ public function form()
         if (!$this->inventario) {
             Util::erro(ERRO_REGISTRO_NAO_ENCONTRADO);
             }
-
-            $this->inventario["id_computador"] = htmlspecialchars(utf8_encode($this->inventario["id_computador"]));
-            $this->inventario["id_tela"] = htmlspecialchars(utf8_encode($this->inventario["id_tela"]));
-            $this->inventario["id_equipamento"] = htmlspecialchars(utf8_encode($this->inventario["id_equipamento"]));
-            $this->inventario["patrimonio"] = htmlspecialchars(utf8_encode($this->inventario["patrimonio"]));
-
            // Relação com os grupos
             $gruposRels = $db->acl_grupo_usuario('id_usuario', $_GET['id']);
             foreach ($gruposRels as $grupoRel) {
                 $this->gruposUsuario[] = $grupoRel['id_acl_grupo'];
             }
-        }
-        // Carrega os computadores
-        $computadoresDb = $db->computador()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("marca");
-        $this->computadores = array();
-        foreach ($computadoresDb as $computadorDb) {
-            $this->computadores[] = array(
-                "id" => $computadorDb["id"],
-                "marca" => htmlspecialchars(utf8_encode($computadorDb["marca"] . ", " . $computadorDb["tipo"])),
-            );
-        }
-        // Carrega as telas
-        $telasDb = $db->tela()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("marca");
-        $this->telas = array();
-        foreach ($telasDb as $telaDb) {
-            $this->telas[] = array(
-                "id" => $telaDb["id"],
-                "marca" => htmlspecialchars(utf8_encode($telaDb["marca"] . " " . $telaDb["tamanho"] . " | " . $telaDb["tipo"])),
-            );
-        }
-        // Carrega os equipamentos
-        $equipamentosDb = $db->equipamento()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("marca");
-        $this->equipamentos = array();
-        foreach ($equipamentosDb as $equipamentoDb) {
-            $this->equipamentos[] = array(
-                "id" => $equipamentoDb["id"],
-                "marca" => htmlspecialchars(utf8_encode($equipamentoDb["nome"] . ", " . $equipamentoDb["marca"])),
-            );
         }
         // Carrega os pontos
         $pontosDb = $db->ponto()->where("id_empresa = " . Security::usuario()['id_empresa'])->order("nome");
@@ -108,21 +109,12 @@ public function salvar()
         // Obtém o horário atual
         $currentDateTime = date('Y-m-d H:i:s');
 
-        // Preenche os campos
-        if($_POST['id_computador'] == '' && $_POST['id_tela'] == ''){
-            $inventario['id_equipamento']       = utf8_encode($_POST['id_equipamento']);
-        }else if($_POST['id_tela'] == '' && $_POST['id_equipamento'] == ''){
-            $inventario['id_computador']        = utf8_encode($_POST['id_computador']);
-        }else if($_POST['id_equipamento'] == '' && $_POST['id_computador'] == ''){
-            $inventario['id_tela']              = utf8_encode($_POST['id_tela']);
-        }else{
-            Util::redirect("index.php?controle=inventario&acao=listar&erro=1");
-        }
         if(!$_POST['id_ponto'] == ''){
             $inventario['id_ponto']             = utf8_encode($_POST['id_ponto']);
         } else{
             $inventario['id_ponto']             = NULL;
         }
+        $inventario['nome']               = utf8_encode($_POST['nome']);
         $inventario['patrimonio']               = utf8_encode($_POST['patrimonio']);
         $inventario['data']                     =  $currentDateTime;
         $inventario['id_empresa']               = Security::usuario()['id_empresa'];
@@ -145,54 +137,6 @@ public function excluir()
         $inventario->delete();
         Util::redirect('index.php?controle=inventario&acao=listar');
     }
-}
-// Filtro do inventario
-public function filtro(){
-    // Filtro
-    $pesquisaPc = isset($_POST["pesquisaPc"]) ? htmlspecialchars($_POST["pesquisaPc"]) : null;
-    $pesquisaTela = isset($_POST["pesquisaTela"]) ? htmlspecialchars($_POST["pesquisaTela"]) : null;
-    $pesquisaEquipamento = isset($_POST["pesquisaEquipamento"]) ? htmlspecialchars($_POST["pesquisaEquipamento"]) : null;
-
-    // Carrega os finalizados com o filtro
-    $this->pagination = new Pagination("inventario", null, array());
-    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
-    // Adiciona o filtro pelo id do equipamento selecionado
-    if ($pesquisaPc) {
-        $this->pagination->filters[] = "id_computador LIKE '%" . $pesquisaPc . "%'";
-    }else if ($pesquisaTela){
-        $this->pagination->filters[] = "id_tela LIKE '%" . $pesquisaTela . "%'";
-    }else if ($pesquisaEquipamento){
-        $this->pagination->filters[] = "id_equipamento LIKE '%" . $pesquisaEquipamento . "%'";
-    }
-    $this->pagination->load();
-    
-    $db = Database::getConn();
-    // Renderiza a view
-    $this->render('inventario/lista', 'default');
-}
-// Filtro do estoque
-public function filtroEstoque(){
-    // Filtro
-    $pesquisaPc = isset($_POST["pesquisaPc"]) ? htmlspecialchars($_POST["pesquisaPc"]) : null;
-    $pesquisaTela = isset($_POST["pesquisaTela"]) ? htmlspecialchars($_POST["pesquisaTela"]) : null;
-    $pesquisaEquipamento = isset($_POST["pesquisaEquipamento"]) ? htmlspecialchars($_POST["pesquisaEquipamento"]) : null;
-
-    // Carrega os finalizados com o filtro
-    $this->pagination = new Pagination("inventario", null, array());
-    $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
-    // Adiciona o filtro pelo id do equipamento selecionado
-    if ($pesquisaPc) {
-        $this->pagination->filters[] = "id_computador LIKE '%" . $pesquisaPc . "%'";
-    }else if ($pesquisaTela){
-        $this->pagination->filters[] = "id_tela LIKE '%" . $pesquisaTela . "%'";
-    }else if ($pesquisaEquipamento){
-        $this->pagination->filters[] = "id_equipamento LIKE '%" . $pesquisaEquipamento . "%'";
-    }
-    $this->pagination->load();
-    
-    $db = Database::getConn();
-    // Renderiza a view
-    $this->render('estoque/lista', 'default');
 }
 
 }

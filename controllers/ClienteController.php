@@ -25,7 +25,7 @@ class ClienteController extends AbstractController
             $this->pagination->columnsFilters = array("id", "nome", "email");
         }
         
-        
+        $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
         $this->pagination->load();
 
         // Renderiza a view
@@ -68,7 +68,18 @@ class ClienteController extends AbstractController
                 $this->pagination->load();
 
                 $this->render('cliente/lista', 'default');
-            } else {
+            } else if(!$vendedor && Security::usuario()['perfil'] == '1') {
+                $this->pagination = new Pagination("cliente", null, array());
+                $this->pagination->columnsFilters = array("id", "nome", "email");
+                // Filtro de busca, se houver
+                if (!empty($_GET['search'])) {
+                    $filtro = $_GET['search'];
+                    $this->pagination->filters[] = "empresa LIKE '%" . $filtro . "%'";
+                }
+                $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
+                $this->pagination->load();
+                $this->render('cliente/lista', 'default');
+            }else{
                 $this->render('index/inicio', 'default');
             }
 
@@ -208,6 +219,7 @@ class ClienteController extends AbstractController
             $prospeccao['observacao'] = trim($_POST['observacao'] ?? '');
             $prospeccao['id_vendedor'] =  $_POST['vendedor_id'] ?: null;
             $prospeccao['id_cliente']       = $clienteId;
+            $prospeccao['id_empresa']   = Security::usuario()['id_empresa'];
             $prospeccaoId = $db->prospeccao()->insert($prospeccao);
         }
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>RIS Sistemas</title>
+    <title>RVA Sistemas</title>
 	<!-- Custom CSS -->
 	<link href="assets/css/login.css" rel="stylesheet">
 	<link href="assets/css/custom.css" rel="stylesheet">

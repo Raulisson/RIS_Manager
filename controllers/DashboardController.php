@@ -65,8 +65,14 @@ class DashboardController extends AbstractController
         }
 
         $this->qtdClientesAntigos = count($clientesAntigos);
-        $this->clientesAntigosIds = array_column($clientesAntigos, 'id');
-        
+        //var_dump($clientesAntigos);die;
+        $this->clientesAntigosIds = [];
+        foreach ($clientesAntigos as $cliente) {
+            if (isset($cliente['id'])) {
+                $this->clientesAntigosIds[] = $cliente['id'];
+            }
+        }
+
         //PROSPECAÇÃO
         $this->prospeccoesfeitas = [];
         foreach ($vendedores as $vendedor) {
@@ -119,7 +125,7 @@ class DashboardController extends AbstractController
             } else {
                 
             }
-
+            $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
             $this->pagination->load();
 
             // Renderiza a view de clientes
@@ -162,7 +168,7 @@ class DashboardController extends AbstractController
             } else {
                 
             }
-
+            $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
             $this->pagination->load();
 
             // Renderiza a view de clientes
@@ -202,7 +208,7 @@ class DashboardController extends AbstractController
                 $this->pagination = new Pagination("prospeccao", null, array());
                 $this->pagination->columnsFilters = array("id", "nome");
             }
-
+            $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
             $this->pagination->load();
 
             // Renderiza a view de clientes
@@ -227,6 +233,7 @@ class DashboardController extends AbstractController
                 $this->pagination = new Pagination("prospeccao", null, array());
                 $this->pagination->columnsFilters = array("id", "nome");
             }
+            $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
             $this->pagination->load();
             $this->render('dashboard/prospeccoesadmin', 'default');
         } else{

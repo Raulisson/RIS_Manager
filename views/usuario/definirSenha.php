@@ -1,7 +1,7 @@
             <div class="auth-box">
                 <div id="loginform">
                     <div class="logo">
-                        <span class="db"><img src="./assets/images/logo.png" style="width:100%" alt="logo"></span>
+                        <span class="db"><img src="./assets/images/logo1.png" style="width:100%" alt="logo"></span>
                         <h5 class="font-medium mb-2 mt-4">Informe sua senha para login</h5>
                     </div>
                     <!-- Form -->

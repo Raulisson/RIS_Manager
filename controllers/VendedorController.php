@@ -17,6 +17,7 @@ class VendedorController extends AbstractController
 
         $this->pagination = new Pagination("vendedor", null, array());
         $this->pagination->columnsFilters = array("id", "nome");
+        $this->pagination->filters[] = "id_empresa = " . Security::usuario()['id_empresa']; // Filtro por empresa
         $this->pagination->load();
 
         // Renderiza a view

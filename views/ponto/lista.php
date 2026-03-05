@@ -16,13 +16,18 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-xlg-12 col-md-12">
-			<form method="POST" action="?controle=ponto&acao=filtro">
-                <div class="col-md-2">
-                    <label>Nome do Ponto:</label>
-                    <input type="text" name="pesquisa" class="form-control">
-                    <button type="submit" class="btn btn-secondary m-1">Filtrar</button>
-                </div>
-            </form>
+			<form method="GET" action="index.php">
+					<input type="hidden" name="controle" value="ponto">
+					<input type="hidden" name="acao" value="listar">
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<input type="text" placeholder="Pesquisar ponto" name="searchname" class="form-control"value="<?php echo isset($_GET['searchname']) ? $_GET['searchname'] : ''; ?>">
+						</div>
+						<div class="col-md-2">
+							<button type="submit" class="btn btn-primary">Buscar</button>
+						</div>
+					</div>
+				</form>
 			<div class="white-box">
 				<div class="table-responsive">
 
