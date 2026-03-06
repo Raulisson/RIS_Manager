@@ -153,6 +153,13 @@
                                         <span class="hide-menu">Lista de Finalizados</span>
                                     </a>
                                 </li>
+                                <!-- Menu - Relatório IVC -->
+                                <li class="sidebar-item">
+                                    <a href="?controle=atividade&acao=relatorioIVC" class="sidebar-link">
+                                        <i class="mdi mdi-border-top"></i>
+                                        <span class="hide-menu">Gerar Relatório IVC</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <?php endif; ?>

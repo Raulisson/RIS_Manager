@@ -159,6 +159,9 @@
                 var obs = info.event.extendedProps.obs;
                 var ativo = info.event.extendedProps.ativo;
                 var prioridade = info.event.extendedProps.prioridade;
+                var ivc = info.event.extendedProps.ivc;
+                var codigo_player = info.event.extendedProps.codigo_player;
+                var codigo_display = info.event.extendedProps.codigo_display;
                 
                 // Preencher os campos da modal com os dados da atividade selecionada
                 $('#edit_event_id').val(eventId);
@@ -167,6 +170,16 @@
                 $('#edit_obs').val(obs);
                 $('#edit_ativo').prop('checked', ativo == 1); // Define o estado do checkbox de acordo com o valor do evento
                 $('#edit_prio').prop('checked', prioridade == 1); // Define o estado do checkbox de acordo com o valor do evento
+                $('#edit_ivc').prop('checked', ivc == 1);
+                $('#edit_codigo_player').val(codigo_player);
+                $('#edit_codigo_display').val(codigo_display);
+                
+                // Mostrar/ocultar campos IVC baseado no estado
+                if (ivc == 1) {
+                    $('#editIvcFields').css('display', 'block');
+                } else {
+                    $('#editIvcFields').css('display', 'none');
+                }
             });
             
             $('#editarModal').on('hidden.bs.modal', function () {
@@ -182,7 +195,10 @@
                     edit_data_inicio: $('#edit_data_inicio').val(),
                     edit_obs: $('#edit_obs').val(),
                     edit_ativo: $('#edit_ativo').is(':checked') ? 1 : 0,
-                    edit_prioridade: $('#edit_prio').is(':checked') ? 1 : 0
+                    edit_prioridade: $('#edit_prio').is(':checked') ? 1 : 0,
+                    edit_ivc: $('#edit_ivc').is(':checked') ? 1 : 0,
+                    edit_codigo_player: $('#edit_codigo_player').val() || null,
+                    edit_codigo_display: $('#edit_codigo_display').val() || null
                 };
             
                 // Envia os dados via AJAX para a controladora PHP
@@ -262,6 +278,9 @@
                     obs: $('#observacao').val(),
                     prioridade: $('#prio').is(':checked') ? 1 : 0,
                     ativo: $('#checkin').is(':checked') ? 1 : 0,
+                    ivc: $('#ivc').is(':checked') ? 1 : 0,
+                    codigo_player: $('#codigo_player').val() || null,
+                    codigo_display: $('#codigo_display').val() || null
                     
                 };
         
@@ -284,6 +303,30 @@
                         console.error(xhr.responseText);
                     }
                 });
+            });
+            
+            // Toggle para mostrar/ocultar campos IVC no modal de adicionar
+            $(document).on('change', '#ivc', function() {
+                console.log('IVC change triggered');
+                if ($(this).is(':checked')) {
+                    $('#ivcFields').css('display', 'block');
+                } else {
+                    $('#ivcFields').css('display', 'none');
+                    $('#codigo_player').val('');
+                    $('#codigo_display').val('');
+                }
+            });
+            
+            // Toggle para mostrar/ocultar campos IVC no modal de edição
+            $(document).on('change', '#edit_ivc', function() {
+                console.log('Edit IVC change triggered');
+                if ($(this).is(':checked')) {
+                    $('#editIvcFields').css('display', 'block');
+                } else {
+                    $('#editIvcFields').css('display', 'none');
+                    $('#edit_codigo_player').val('');
+                    $('#edit_codigo_display').val('');
+                }
             });
             
         });

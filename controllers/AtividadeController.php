@@ -10,6 +10,15 @@ class AtividadeController extends AbstractController
         $this->render('atividade/calendario', 'default');
     }
 
+    /**
+     * Página para gerar relatório IVC
+     */
+    public function relatorioIVC()
+    {
+        // redireciona para a view
+        $this->render('atividade/relatorio_ivc', 'default');
+    }
+
     public function listarAtividadesCalendario()
     {
         $db = Database::getConn();
@@ -40,6 +49,9 @@ class AtividadeController extends AbstractController
                 'end' => $booking["end_date"],
                 'ativo' => $booking["ativo"],
                 'prioridade' => $booking["prioridade"],
+                'ivc' => $booking["ivc"],
+                'codigo_player' => $booking["codigo_player"],
+                'codigo_display' => $booking["codigo_display"],
                 'obs' => $booking["obs"],
                 'created_at' => $booking["created_at"],
                 'atualizada' => $booking["updated_at"],
@@ -65,6 +77,9 @@ class AtividadeController extends AbstractController
         $obs = $_POST['obs'];
         $ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0;
         $prioridade = $_POST['prioridade'];
+        $ivc = isset($_POST['ivc']) ? $_POST['ivc'] : 0;
+        $codigo_player = isset($_POST['codigo_player']) ? (int)$_POST['codigo_player'] : null;
+        $codigo_display = isset($_POST['codigo_display']) ? (int)$_POST['codigo_display'] : null;
         $id_empresa = Security::usuario()['id_empresa'];
         $id_usuario = Security::usuario()['id'];
         $id_perfil = Security::usuario()['perfil'];
@@ -79,6 +94,9 @@ class AtividadeController extends AbstractController
             'obs' => $obs,
             'ativo' => $ativo,
             'prioridade' => $prioridade,
+            'ivc' => $ivc,
+            'codigo_player' => $codigo_player,
+            'codigo_display' => $codigo_display,
             'created_at' => $currentDateTime,
             'updated_at' => $currentDateTime,
             'id_empresa' => $id_empresa,
@@ -136,6 +154,9 @@ public function editarAtividade()
         $obs = $_POST['edit_obs'];
         $ativo = isset($_POST['edit_ativo']) ? $_POST['edit_ativo'] : 0;
         $prioridade = $_POST['edit_prioridade'];
+        $ivc = isset($_POST['edit_ivc']) ? $_POST['edit_ivc'] : 0;
+        $codigo_player = isset($_POST['edit_codigo_player']) ? (int)$_POST['edit_codigo_player'] : null;
+        $codigo_display = isset($_POST['edit_codigo_display']) ? (int)$_POST['edit_codigo_display'] : null;
         $id_empresa = Security::usuario()['id_empresa'];
         $id_usuario = Security::usuario()['id'];
         $id_perfil = Security::usuario()['perfil'];
@@ -151,7 +172,10 @@ public function editarAtividade()
             'obs' => $obs,
             'ativo' => $ativo,
             'prioridade' => $prioridade,
-            'created_at' => $currentDateTime,
+            'ivc' => $ivc,
+            'codigo_player' => $codigo_player,
+            'codigo_display' => $codigo_display,
+            'updated_at' => $currentDateTime,
             'id_empresa' => $id_empresa,
             'id_usuario' => $id_usuario,
             'id_perfil' => $id_perfil
@@ -292,4 +316,103 @@ public function filtro(){
     $this->render('atividade/finalizado', 'default');
 }
 
+/**
+     * Converter registros IVC em relatório Excel
+     */
+    public function converterIVC()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data_inicio = $_POST['data_inicio'] . ' 00:00:00';
+            $data_fim = $_POST['data_fim'] . ' 23:59:59';
+            $id_empresa = Security::usuario()['id_empresa'];
+
+            $db = Database::getConn();
+            
+            // Buscar registros com ivc = 1 entre as datas
+            $bookings = $db->bookings()
+                ->where("ivc = 1 AND id_empresa = {$id_empresa} AND start_date >= '{$data_inicio}' AND start_date <= '{$data_fim}'")
+                ->order("start_date");
+
+            if (count($bookings) == 0) {
+                echo json_encode(['success' => false, 'message' => 'Nenhum registro encontrado para o período especificado.']);
+                return;
+            }
+
+            // Criar arquivo CSV
+            $filename = 'relatorio_ivc_' . date('Y-m-d_H-i-s') . '.csv';
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            
+            // Abrir output como arquivo
+            $output = fopen('php://output', 'w');
+            
+            // BOM para UTF-8
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Headers
+            $headers = [
+                'ORDEM DE SERVIÇO',
+                'CÓDIGO DO PONTO',
+                'ESTABELECIMENTO',
+                'CÓDIGO DO PLAYER AFETADO',
+                'DATA INICIO',
+                'HORA INICIO',
+                'DATA TERMINO',
+                'HORA TERMINO',
+                'DESCRIÇÃO DA FALHA REPARO'
+            ];
+            
+            fputcsv($output, $headers, ';');
+            
+            // Processar dados
+            $numero = 1;
+            $mes = date('M', strtotime($data_inicio));
+            
+            foreach ($bookings as $booking) {
+                // A: ORDEM DE SERVIÇO (numerado como 001/FEV)
+                $ordem_servico = str_pad($numero, 3, '0', STR_PAD_LEFT) . '/' . strtoupper(substr($mes, 0, 3));
+                
+                // B: CÓDIGO DO PONTO (codigo_display)
+                $codigo_ponto = $booking['codigo_display'];
+                
+                // C: ESTABELECIMENTO (title)
+                $estabelecimento = $booking['title'];
+                
+                // D: CÓDIGO DO PLAYER AFETADO (codigo_player)
+                $codigo_player = $booking['codigo_player'];
+                
+                // E: DATA INICIO
+                $data_inicio_only = date('d/m/Y', strtotime($booking['start_date']));
+                
+                // F: HORA INICIO
+                $hora_inicio = date('H:i', strtotime($booking['start_date']));
+                
+                // G: DATA TERMINO
+                $data_fim_only = date('d/m/Y', strtotime($booking['end_date']));
+                
+                // H: HORA TERMINO
+                $hora_fim = date('H:i', strtotime($booking['end_date']));
+                
+                // I: DESCRIÇÃO DA FALHA REPARO (obs)
+                $descricao = $booking['obs'];
+
+                $dados = [
+                    $ordem_servico,
+                    $codigo_ponto,
+                    $estabelecimento,
+                    $codigo_player,
+                    $data_inicio_only,
+                    $hora_inicio,
+                    $data_fim_only,
+                    $hora_fim,
+                    $descricao
+                ];
+                
+                fputcsv($output, $dados, ';');
+                $numero++;
+            }
+            
+            fclose($output);
+        }
+    }
 }

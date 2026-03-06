@@ -81,6 +81,27 @@
 								<input type="checkbox" class="sc-gJwTLC ikxBAC" name="prio" id="prio" value="1">
 							</div>
 						</div>
+						<!-- Checkbox Relatório IVC -->
+						<div class="form-group col-md-12">
+							<div class="checkbox-wrapper-2">
+								<label for="ivc" class="ul-form__label p-0">Relatório IVC</label>
+								<br>
+								<input type="checkbox" class="sc-gJwTLC ikxBAC" name="ivc" id="ivc" value="1">
+							</div>
+						</div>
+						<!-- Inputs para Código Player e Código Display -->
+						<div class="form-group col-md-12" id="ivcFields" style="display: none;">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="codigo_player" class="ul-form__label p-0">Código Player</label>
+									<input type="number" class="form-control" name="codigo_player" id="codigo_player" placeholder="Número">
+								</div>
+								<div class="col-md-6">
+									<label for="codigo_display" class="ul-form__label p-0">Código Display</label>
+									<input type="number" class="form-control" name="codigo_display" id="codigo_display" placeholder="Número">
+								</div>
+							</div>
+						</div>
 						
 					</div>
 				</div>
@@ -130,6 +151,27 @@
 									<label for="edit_prio" class="ul-form__label p-0">Prioridade</label>
 									<br>
 									<input type="checkbox" class="sc-gJwTLC ikxBAC" name="edit_prio" id="edit_prio" value="1">
+								</div>
+							</div>
+							<!-- Checkbox Relatório IVC -->
+							<div class="form-group col-md-12">
+								<div class="checkbox-wrapper-2">
+									<label for="edit_ivc" class="ul-form__label p-0">Relatório IVC</label>
+									<br>
+									<input type="checkbox" class="sc-gJwTLC ikxBAC" name="edit_ivc" id="edit_ivc" value="1">
+								</div>
+							</div>
+							<!-- Inputs para Código Player e Código Display -->
+							<div class="form-group col-md-12" id="editIvcFields" style="display: none;">
+								<div class="row">
+									<div class="col-md-6">
+										<label for="edit_codigo_player" class="ul-form__label p-0">Código Player</label>
+										<input type="number" class="form-control" name="edit_codigo_player" id="edit_codigo_player" placeholder="Número">
+									</div>
+									<div class="col-md-6">
+										<label for="edit_codigo_display" class="ul-form__label p-0">Código Display</label>
+										<input type="number" class="form-control" name="edit_codigo_display" id="edit_codigo_display" placeholder="Número">
+									</div>
 								</div>
 							</div>
 							<!-- Mais campos conforme necessário -->
