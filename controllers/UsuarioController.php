@@ -44,6 +44,40 @@ class UsuarioController extends AbstractController
         }
     }
 
+    public function autenticarApp()
+    {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        // Lê JSON enviado pelo Android
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $usuario = $data['usuario'] ?? '';
+        $senha = $data['senha'] ?? '';
+
+        if (empty($usuario) || empty($senha)) {
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Campos obrigatorios']);
+            return;
+        }
+
+        $db = Database::getConn();
+        $usuario = $db->usuario()
+            ->where(['usuario' => $usuario, 'senha' => sha1(md5($senha))])
+            ->fetch();
+
+        if ($usuario) {
+            echo json_encode([
+                'sucesso'     => true,
+                'id'          => $usuario['id'],
+                'nome'        => $usuario['nome'],
+                'usuario'     => $usuario['usuario'],
+                'perfil'      => $usuario['perfil'],
+                'id_empresa'  => $usuario['id_empresa'],
+            ]);
+        } else {
+            echo json_encode(['sucesso' => false, 'mensagem' => 'usuario ou senha inválidos']);
+        }
+    }
     /**
      * Lista os usuários
      */

@@ -1,7 +1,15 @@
 <?php
+    // Responde o preflight CORS imediatamente
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+        header("Access-Control-Allow-Headers: Authorization, Content-Type");
+        http_response_code(200);
+        exit;
+    }
+
     header("Access-Control-Allow-Headers: Authorization, Content-Type");
     header("Access-Control-Allow-Origin: *");
-
     session_start();
     date_default_timezone_set('America/Sao_Paulo');
     
